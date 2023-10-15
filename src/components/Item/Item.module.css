@@ -1,0 +1,10 @@
+.btn_color{
+  background-color: blueviolet;
+  color: white;
+}
+
+.btn_color:hover{
+  background-color: white;
+  color: blueviolet;
+  border: 1px solid blueviolet;
+}
