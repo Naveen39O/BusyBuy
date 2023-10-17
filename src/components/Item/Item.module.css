@@ -8,3 +8,12 @@
   color: blueviolet;
   border: 1px solid blueviolet;
 }
+
+.card_self{
+  padding: 5%;
+}
+
+.img_size{
+  width: 100%;
+  height: 320px;
+}

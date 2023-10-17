@@ -10,8 +10,8 @@ const Navbar = ()=> {
           <span className="navbar-toggler-icon"></span>
         </button>
         {isLoggedIn && 
-          <div className="collapse navbar-collapse" id="navbarNav" >
-            <ul className="navbar-nav">
+          <div className="collapse navbar-collapse justify-content-end" id="navbarNav" >
+            <ul className="navbar-nav ">
               <li className={`nav-item ${style.flex_row}`}>
                 <img src="" alt=""/>
                 <a className="nav-link">Home</a>

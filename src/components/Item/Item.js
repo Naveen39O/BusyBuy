@@ -2,17 +2,28 @@ import { useState } from "react";
 import style from "./Item.module.css";
 
 const Item = ({imgLink, description, price})=> {
-  const [isClicked, SetIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = ()=> {
+    setIsClicked(true);
+    setTimeout(()=> {
+      setIsClicked(false);
+    }, 2000);
+  }
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <img src={imgLink} alt="" />
-        <p className="card-text">{description}</p>
-        <p>&#x20B9;{price}</p>  
-        <button type="button" className={`btn ${style.btn_color}`}>
-          {isClicked ? "Adding": "Add To Cart"}
-        </button>
+    <div className="col">
+      <div className={`card ${style.card_self}`}>
+        <img src={imgLink} alt="" className={`card-img-top ${style.img_size}`}/>
+        <div className="card-body">
+          <span className="d-inline-block text-truncate" style={{maxWidth: 150}}>{description}</span>
+          <p>&#x20B9;{price}</p>  
+          <button type="button" className={`btn ${style.btn_color}`}
+            onClick={()=> handleClick()}  
+          >
+            {isClicked ? "Adding": "Add To Cart"}
+          </button>
+        </div>
       </div>
     </div>
   )
