@@ -1,6 +1,6 @@
 import style from "./Home.module.css"
-import Filter from '../components/Filter/Filter';
-import ItemContainer from '../components/ItemContainer/ItemContainer';
+import Filter from '../../components/Filter/Filter';
+import ItemContainer from '../../components/ItemContainer/ItemContainer';
 
 const Home = ()=> {
 
