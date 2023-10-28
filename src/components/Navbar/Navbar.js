@@ -2,12 +2,12 @@ import style from "./Navbar.module.css";
 import { Outlet, Link } from "react-router-dom";
 
 const Navbar = ()=> {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-light-rgb">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">Busy Buy</a>
+          <Link className="navbar-brand" to="/">Busy Buy</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -16,19 +16,19 @@ const Navbar = ()=> {
               <ul className="navbar-nav ">
                 <li className={`nav-item ${style.flex_row}`}>
                   <img src="" alt=""/>
-                  <a className="nav-link">Home</a>
+                  <Link className="nav-link" to="/">Home</Link>
                 </li>
                 <li className={`nav-item ${style.flex_row}`}>
                   <img src="" alt=""/>
-                  <a className="nav-link">My orders</a>
+                  <Link className="nav-link" to="/myorders">My orders</Link>
                 </li>
                 <li className={`nav-item ${style.flex_row}`}>
                   <img src="" alt=""/>
-                  <a className="nav-link">Cart</a>
+                  <Link className="nav-link" to="/cart">Cart</Link>
                 </li>
                 <li className={`nav-item ${style.flex_row}`}>
                   <img src="" alt=""/>
-                  <a className="nav-link">Logout</a>
+                  <Link className="nav-link" to="/signin">Logout</Link>
                 </li>
               </ul>
             </div>
