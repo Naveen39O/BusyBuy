@@ -1,7 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import { getAuth, createUserWithEmailAndPassword,
-        signInWithEmailAndPassword  } from "firebase/auth";
-import { redirect } from "react-router-dom";
+        signInWithEmailAndPassword, signOut  } from "firebase/auth";
 import { db, app } from "./firebaseinit";
 
 const authContext = createContext();
@@ -15,6 +14,7 @@ export default function CustomAuthContext({children}){
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState({name:"", email:"", password:""});
+  const [userId, setUserId] = useState();
 
   const handleNameChange = (e)=> {
     setUserInfo({...userInfo, name: e.target.value});
@@ -37,15 +37,19 @@ export default function CustomAuthContext({children}){
             // Signed in 
             const user = userCredential.user;
             console.log(user);
+            setIsLoggedIn(true);
+            setUserId(user.uid);
             // ...
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
+            return false;
           });
 
     setUserInfo({name:"", email:"", password:""});
+    return true;
   }
 
   const handleSignUp = async (e)=>{
@@ -57,24 +61,40 @@ export default function CustomAuthContext({children}){
         // Signed up 
         const user = userCredential.user;
         console.log(user);
-        console.log("User Credentials:", userCredential);
+        setUserId(user.uid);
+        // console.log("User Credentials:", userCredential);
+        setIsLoggedIn(true);
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, "====", errorMessage);
+        return false;
         // ..
-        // return;
       });
 
     setUserInfo({name:"", email:"", password:""});
-    // return redirect("/");
+    return true;
+  }
+
+  const handleSignOut = ()=>{
+    const auth = getAuth(app);
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      setIsLoggedIn(false);
+      console.log("Log out Successful");
+    }).catch((error) => {
+      // An error happened.
+      console.log("Error signing out:", error);
+    });
+
   }
 
   return (
     <authContext.Provider value={{handleSignUp, handleNameChange, handleEmailChange,
-                                  handlePasswordChange, userInfo, handleSignIn,
+                                  handlePasswordChange, userInfo, handleSignIn, isLoggedIn,
+                                  handleSignOut, userId
                                   }}> 
       {children}
     </authContext.Provider>
