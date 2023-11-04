@@ -1,17 +1,24 @@
 import style from "./SignIn.module.css"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthValue } from "../../authContext";
 
 const SignIn = ()=> {
 
   const value = useAuthValue();
+  const navigate = useNavigate();
 
   return (
     <div className={style.signin_container}>
       <div className>
         <span className="fs-1 fw-bold">Sign In</span>
         <div className={style.form_container}>
-          <form onSubmit={value.handleSignIn}>
+          <form onSubmit={(e)=> {
+              let res;
+              res = value.handleSignIn(e); 
+              console.log(res);
+              navigate("/");
+              // res? navigate("/"): navigate("/signin");
+            }}>
             <div className="mb-3">
               {/* <label for="exampleInputEmail1" className="form-label">Email address</label> */}
               <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"

@@ -1,21 +1,21 @@
 import style from "./SignUp.module.css"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {useAuthValue} from "../../authContext";
-import { useState } from "react";
 
 
 const SignUp = ()=> {
-  
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const value = useAuthValue();
+  const navigate = useNavigate();
 
   return (
     <div className={style.signup_container}>
       <div className>
         <span className="fs-1 fw-bold">Sign Up</span>
         <div className={style.form_container}>
-          <form onSubmit={value.handleSignUp}>
+          <form onSubmit={(e)=> {
+            value.handleSignUp(e);
+            navigate("/");
+          }}>
             <div className="mb-3">
               {/* <label for="exampleInputEmail1" className="form-label">Email address</label> */}
               <input type="text" className="form-control" id="name" aria-describedby="emailHelp"
