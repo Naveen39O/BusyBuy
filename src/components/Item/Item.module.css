@@ -18,3 +18,9 @@
   width: 70%;
   height: 240px;
 }
+
+.item_count_container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
