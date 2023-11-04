@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
-
+import {doc, collection, updateDoc, setDoc} from "firebase/firestore";
+import { db } from "./firebaseinit";
 const itemContext = createContext();
 
 function useValue(){
@@ -41,43 +42,75 @@ export default function CustomItemContext({children}){
   }
 
   const addItemToCart =(item)=>{
+    console.log(cartData);
+    let cartItem;
     const itemIndex = cartData.findIndex((curr)=> curr.id === item.id );
 
     if(itemIndex === -1){
-      const cartItem = {
+      cartItem = {
         ...item,
         count: 1,
       }
-      cartData.push(cartItem);
-      setTotal(total + item.price);
-      setCartData([...cartData]);
+      // cartData.push(cartItem);
+      setTotal((total + item.price).toFixed(2));
+      setCartData([...cartData, cartItem]);
     } else{
-      setCartData(prev => prev[itemIndex].count++);
-      setTotal(total + item.price);
+      cartItem = cartData;
+      cartItem[itemIndex].count++;
+      setCartData(cartItem);
+      setTotal((total + item.price).toFixed(2));
     }
+    console.log(cartData);
   } 
 
-  const removeItemFromCart = (item)=>{
+  const reduceItemInCart = (item)=>{
     const itemIndex = cartData.findIndex((curr)=> curr.id === item.id);
+    let cartItem;
 
     if(itemIndex === -1){
       return;
     }else{
       if(cartData[itemIndex].count > 1){
-        setCartData(prev => prev[itemIndex].count--);
-        setTotal(total - item.price);
+        cartItem = cartData;
+        cartItem[itemIndex].count--;
+        setCartData(cartItem);
+        setTotal((total - item.price).toFixed(2));
       } else {
-        const newCartData = cartData.splice(itemIndex, 1);
+        let newCartData = cartData;
+        newCartData.splice(itemIndex, 1);
         setCartData(newCartData);
-        setTotal(total - item.price);
+        setTotal((total - item.price).toFixed(2));
       }
     }
+    console.log(cartData);
+  }
+
+  const removeItemFromCart = (item)=>{
+    const itemIndex = cartData.findIndex((curr)=> curr.id === item.id);
+    console.log(itemIndex);
+
+    setTotal((total - (cartData[itemIndex].count * item.price)).toFixed(2));
+    let newCartData = cartData;
+    newCartData.splice(itemIndex, 1);
+    console.log(newCartData);
+    setCartData(newCartData);
+  }
+
+  const handlePurchase = async (userId, order, total)=>{
+    const orderRef = doc(collection(db, "users", userId, "orders"));
+    // console.log(order);
+    const orderDetails = {order,
+      total: total,
+      createdAt: new Date().toLocaleDateString()};
+    // console.log(orderDetails);
+    await setDoc(orderRef, orderDetails);
+    setCartData([]);
   }
 
   return (
     <itemContext.Provider value = {{total, setTotal, data, handleCategoryCheck,
                                     filterData, setFilterData, addItemToCart, removeItemFromCart,
-                                    cartData}}>
+                                    cartData, reduceItemInCart, handlePurchase}}>
       {children}
     </itemContext.Provider>
   )
